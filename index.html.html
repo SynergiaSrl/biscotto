@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Synergia • Biscotto della fortuna</title>
+  <meta name="description" content="Apri il biscotto della fortuna digitale di Synergia e scopri un messaggio ispirato ai nostri valori." />
+  <meta property="og:title" content="Biscotto della fortuna • Synergia" />
+  <meta property="og:description" content="Scopri un messaggio ispirato ai valori di Synergia." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0cc0df" />
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-042WEXMMMZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-042WEXMMMZ');
+  </script>
+
+  <style>
+    :root{
+      --brand-primary:#0cc0df;
+      --brand-green:#72e8a8;
+      --brand-yellow:#eff698;
+      --brand-lilac:#e5d0fd;
+      --bg:#f7fbfe;
+      --panel:#ffffff;
+      --ink:#1f2937;
+      --muted:#5b6472;
+      --accent:var(--brand-primary);
+      --ring:#dbe7f3;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+      background:
+        radial-gradient(1200px 800px at 20% -10%, var(--brand-lilac) 0%, #f6f7fb 45%),
+        linear-gradient(180deg, #ffffff 0%, #f7fbfe 100%);
+      color:var(--ink); display:flex; align-items:center; justify-content:center; padding:24px;
+    }
+    .card{
+      width:min(720px, 100%); background:var(--panel); border-radius:20px; box-shadow:0 10px 30px rgba(2,8,23,.06);
+      padding:32px 28px 20px 28px; border:1px solid var(--ring);
+      display:flex; flex-direction:column; align-items:center;
+    }
+    .brand{display:flex; flex-direction:column; align-items:center; gap:8px; color:var(--muted); font-size:14px; letter-spacing:.2px; margin-bottom:8px;}
+    .brand .logo{height:56px; width:auto; display:block;}
+    .swatch{display:flex; gap:6px; margin-top:4px;}
+    .swatch i{width:12px; height:12px; border-radius:3px; display:inline-block}
+    .swatch i.c1{background:var(--brand-primary)}
+    .swatch i.c2{background:var(--brand-green)}
+    .swatch i.c3{background:var(--brand-yellow)}
+    .swatch i.c4{background:var(--brand-lilac)}
+    h1{text-align:center; font-size:clamp(22px, 2.6vw, 28px); margin:14px 0 8px}
+    p.sub{text-align:center; margin:0; color:var(--muted); max-width:600px;}
+    .fortune{
+      margin:28px 0; padding:24px; border-radius:16px; border:1px dashed #d3e1ee; background:#f9fbff;
+      font-size:clamp(18px, 2.2vw, 22px); line-height:1.5; font-weight:600;
+      opacity:0; transition:opacity .6s ease;
+    }
+    .fortune.visible{opacity:1;}
+    .meta{display:flex; align-items:center; gap:12px; color:var(--muted); font-size:14px}
+    .actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px}
+    button{
+      appearance:none; border:none; border-radius:12px; padding:12px 16px; cursor:pointer; font-weight:600;
+      background:#eef6ff; color:#0b63a8; transition:transform .05s ease, box-shadow .2s ease;
+      box-shadow:0 1px 0 rgba(2,8,23,.04)
+    }
+    button.primary{background:var(--accent); color:white}
+    button:active{transform:translateY(1px)}
+    footer{margin-top:28px; font-size:13px; color:var(--muted); text-align:center; border-top:1px solid var(--ring); padding-top:10px; width:100%;}
+    footer a{color:var(--muted); text-decoration:none;}
+    footer a:hover{text-decoration:underline;}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <main class="card" role="region" aria-labelledby="title">
+    <div class="brand" aria-label="Synergia">
+      <img class="logo" src="logo-synergia.png" alt="Synergia" />
+      <span>Synergia • Biscotto della fortuna</span>
+      <span class="swatch" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i></span>
+    </div>
+    <h1 id="title">Ecco il tuo biscotto della fortuna digitale!</h1>
+    <p class="sub">Ogni messaggio riflette i valori che orientano il lavoro di Synergia a supporto dei sistemi di welfare, promuovendo conoscenza, innovazione e collaborazione tra persone, enti e territori.</p>
+
+    <div id="fortune" class="fortune" role="status" aria-live="polite">…</div>
+    <div class="meta"><span id="counter">—</span><span>•</span><span id="code">ID: —</span></div>
+
+    <div class="actions">
+      <button class="primary" id="btn-new" title="Mostra un nuovo messaggio">Nuova fortuna</button>
+      <button id="btn-copy" title="Copia il link a questa fortuna">Copia link</button>
+      <button id="btn-share" class="hidden" title="Condividi">Condividi…</button>
+    </div>
+
+    <footer>© Synergia s.r.l. – <a href="https://www.synergia-net.it" target="_blank" rel="noopener noreferrer">www.synergia-net.it</a></footer>
+  </main>
+
+  <script>
+    const fortunes = [
+      "La conoscenza non serve a vincere, ma a capire meglio insieme. 💭",
+      "Ogni sistema può cambiare, se qualcuno osa guardarlo da un punto diverso. 🔍",
+      "Le soluzioni più solide crescono dove le persone si ascoltano. 🤝",
+      "Dietro ogni dato c’è una storia, e dietro ogni storia un’occasione di comprensione. ☀️",
+      "Chi guida bene, illumina anche la strada degli altri. 🌟",
+      "La complessità non va semplificata: va capita con rispetto. 🧭",
+      "Ogni esplorazione è un atto di fiducia: nel mondo, e in chi lo abita. 🌍",
+      "Il futuro non si predice: si costruisce insieme, un progetto alla volta. 🌱",
+      "Ogni dato nasconde una storia: Synergia la ascolta per trasformarla in cambiamento. 💡",
+      "Il benessere nasce quando una comunità si prende cura di tutte le sue persone. ❤",
+      "L’innovazione sociale è una forma d’amore per il futuro. 🌸",
+      "La sinergia è la nostra forza: insieme, le differenze diventano risorse. ❤️"
+    ];
+
+    const $ = sel => document.querySelector(sel);
+    const params = new URLSearchParams(location.search);
+    const palette = ["#0cc0df","#72e8a8","#eff698","#e5d0fd"];
+    if(params.has('c')){ const ci = Math.max(0, Math.min(3, parseInt(params.get('c'),10)||0)); document.documentElement.style.setProperty('--accent', palette[ci]); }
+
+    const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+
+    function pickIndex(){
+      if(params.has('m')){
+        const i = parseInt(params.get('m'), 10);
+        if(!Number.isNaN(i)) return clamp(i, 0, fortunes.length-1);
+      }
+      return Math.floor(Math.random() * fortunes.length);
+    }
+
+    function render(idx){
+      const el = $('#fortune');
+      el.classList.remove('visible');
+      setTimeout(()=>{
+        const text = fortunes[idx];
+        el.textContent = text;
+        el.classList.add('visible');
+      }, 150);
+
+      $('#counter').textContent = `Messaggio ${idx+1} di ${fortunes.length}`;
+      $('#code').textContent = `ID: ${idx}`;
+
+      const url = new URL(location.href);
+      url.searchParams.set('m', idx);
+      history.replaceState(null, '', url);
+    }
+
+    function newRandom(){
+      let idx = pickIndex();
+      const current = parseInt(new URLSearchParams(location.search).get('m'));
+      if(!Number.isNaN(current)){
+        for(let tries=0; tries<6 && idx===current; tries++) idx = pickIndex();
+      }
+      render(idx);
+    }
+
+    function copyLink(){
+      const url = location.href;
+      navigator.clipboard?.writeText(url)
+        .then(()=> toast('Link copiato!'))
+        .catch(()=> {
+          window.prompt('Copia il link:', url);
+        });
+    }
+
+    function toast(msg){
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.position='fixed'; t.style.inset='auto auto 20px 50%'; t.style.transform='translateX(-50%)';
+      t.style.background='rgba(2,8,23,.92)'; t.style.color='#fff'; t.style.padding='10px 14px'; t.style.borderRadius='10px';
+      t.style.fontSize='14px'; t.style.boxShadow='0 6px 20px rgba(2,8,23,.2)';
+      document.body.appendChild(t);
+      setTimeout(()=> t.remove(), 1400);
+    }
+
+    const supportsShare = !!navigator.share;
+    if(supportsShare){
+      const btn = $('#btn-share');
+      btn.classList.remove('hidden');
+      btn.addEventListener('click', async ()=>{
+        try{
+          await navigator.share({title:'Biscotto della fortuna • Synergia', text:$('#fortune').textContent, url:location.href});
+        }catch(e){/* user canceled */}
+      });
+    }
+
+    $('#btn-new').addEventListener('click', newRandom);
+    $('#btn-copy').addEventListener('click', copyLink);
+
+    const initialIndex = pickIndex();
+    render(initialIndex);
+  </script>
+</body>
+</html>
